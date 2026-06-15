@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 管理者のメールアドレス（config.js の ADMIN_EMAILS と必ず一致させること）
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in [
+             'tomo.maeda720@gmail.com'
+           ];
+    }
+
+    match /users/{uid} {
+      // 本人は自分の進捗を読み書きできる。管理者は全員分を閲覧できる。
+      allow read:  if request.auth != null && (request.auth.uid == uid || isAdmin());
+      // 書き込みは本人のみ（管理者でも他人の進捗は書き換えない）
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}

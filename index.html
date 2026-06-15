@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N3 単語 - Học từ vựng N3</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#fff; --ink:#1f2937; --sub:#6b7280;
+    --brand:#4f46e5; --brand2:#6366f1; --ok:#16a34a; --bad:#dc2626;
+    --warn:#f59e0b; --line:#e5e7eb; --soft:#eef2ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
+    background:var(--bg);color:var(--ink);-webkit-tap-highlight-color:transparent}
+  .wrap{max-width:880px;margin:0 auto;padding:16px}
+  .hidden{display:none!important}
+  h1,h2,h3{margin:0 0 8px}
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:12px;font-size:15px}
+  .btn{background:var(--brand);color:#fff;padding:12px 18px;font-weight:600}
+  .btn:hover{background:var(--brand2)}
+  .btn.sec{background:var(--soft);color:var(--brand)}
+  .btn.ghost{background:transparent;color:var(--sub);padding:8px 12px}
+  .btn.sm{padding:8px 12px;font-size:14px}
+  input,select{font-family:inherit;font-size:15px;padding:11px 12px;border:1px solid var(--line);
+    border-radius:10px;width:100%;background:#fff;color:var(--ink)}
+  .card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:14px}
+  .row{display:flex;gap:10px;align-items:center}
+  .row.wrap{flex-wrap:wrap}
+  .sp{justify-content:space-between}
+  label{font-size:13px;color:var(--sub);display:block;margin:10px 0 4px}
+  .muted{color:var(--sub);font-size:13px}
+  .pill{display:inline-block;background:var(--soft);color:var(--brand);border-radius:999px;
+    padding:3px 10px;font-size:12px;font-weight:600}
+  /* top bar */
+  .top{position:sticky;top:0;z-index:20;background:rgba(244,246,251,.9);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line)}
+  .top .wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+  .logo{font-weight:800;color:var(--brand);font-size:18px}
+  .tabbar{display:flex;gap:6px;overflow-x:auto;padding:8px 0}
+  .tab{white-space:nowrap;background:#fff;border:1px solid var(--line);color:var(--sub);
+    padding:9px 14px;border-radius:999px;font-size:14px;font-weight:600}
+  .tab.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+  /* flashcard */
+  .flash{min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;cursor:pointer;user-select:none;padding:24px}
+  .jp{font-size:46px;font-weight:800;letter-spacing:1px}
+  .reading{font-size:22px;color:var(--brand);margin-top:8px}
+  .vn{font-size:24px;color:var(--ink);margin-top:6px}
+  .progressbar{height:8px;background:var(--line);border-radius:999px;overflow:hidden}
+  .progressbar > i{display:block;height:100%;background:var(--brand);width:0%}
+  /* quiz */
+  .opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);
+    color:var(--ink);padding:14px;border-radius:12px;margin-bottom:10px;font-size:17px;font-weight:600}
+  .opt:hover{border-color:var(--brand)}
+  .opt.correct{background:#dcfce7;border-color:var(--ok);color:#166534}
+  .opt.wrong{background:#fee2e2;border-color:var(--bad);color:#991b1b}
+  .opt:disabled{cursor:default}
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+  th{color:var(--sub);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+  .stat{display:flex;gap:12px;flex-wrap:wrap}
+  .statbox{flex:1;min-width:120px;background:var(--soft);border-radius:14px;padding:14px}
+  .statbox .n{font-size:28px;font-weight:800;color:var(--brand)}
+  .statbox .l{font-size:12px;color:var(--sub)}
+  /* calendar */
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+  .cal .d{aspect-ratio:1;border-radius:8px;background:var(--line);display:flex;align-items:center;
+    justify-content:center;font-size:11px;color:var(--sub)}
+  .cal .d.l1{background:#c7d2fe}.cal .d.l2{background:#818cf8;color:#fff}
+  .cal .d.l3{background:#4f46e5;color:#fff}
+  .center{text-align:center}
+  .speak{background:var(--soft);color:var(--brand);border-radius:50%;width:46px;height:46px;
+    font-size:20px;display:inline-flex;align-items:center;justify-content:center}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111827;color:#fff;
+    padding:12px 18px;border-radius:12px;font-size:14px;z-index:99;opacity:0;transition:.3s;pointer-events:none}
+  .toast.show{opacity:1}
+  .err{color:var(--bad);font-size:13px;margin-top:6px}
+  a{color:var(--brand)}
+  .seg{display:flex;background:var(--soft);border-radius:10px;padding:3px}
+  .seg button{flex:1;background:transparent;color:var(--sub);padding:8px;font-weight:600}
+  .seg button.on{background:#fff;color:var(--brand);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login" class="wrap" style="max-width:420px;margin-top:8vh">
+  <div class="center" style="margin-bottom:18px">
+    <div class="logo" style="font-size:30px">N3 単語</div>
+    <div class="muted">Học từ vựng tiếng Nhật N3</div>
+  </div>
+  <div class="card">
+    <div class="seg" style="margin-bottom:14px">
+      <button id="segLogin" class="on" onclick="setAuthMode('login')">Đăng nhập</button>
+      <button id="segReg" onclick="setAuthMode('reg')">Đăng ký</button>
+    </div>
+    <div id="regName" class="hidden">
+      <label>Tên của bạn / お名前</label>
+      <input id="iName" placeholder="Nguyen Van A">
+    </div>
+    <label>Email</label>
+    <input id="iEmail" type="email" placeholder="email@example.com" autocomplete="username">
+    <label>Mật khẩu / パスワード</label>
+    <input id="iPass" type="password" placeholder="••••••" autocomplete="current-password">
+    <div id="authErr" class="err"></div>
+    <button id="authBtn" class="btn" style="width:100%;margin-top:14px" onclick="doAuth()">Đăng nhập</button>
+    <div class="muted center" style="margin-top:12px">
+      Quản trị viên đăng nhập bằng email admin đã cấu hình.
+    </div>
+  </div>
+  <div class="muted center">Phiên bản demo có thể chạy không cần Firebase.</div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app" class="hidden">
+  <div class="top"><div class="wrap">
+    <span class="logo">N3 単語</span>
+    <span class="row">
+      <span id="who" class="muted"></span>
+      <button class="btn ghost sm" onclick="logout()">Thoát</button>
+    </span>
+  </div></div>
+
+  <div class="wrap">
+    <div class="tabbar" id="tabbar"></div>
+
+    <!-- HOME / progress -->
+    <section id="vHome">
+      <div class="card">
+        <h2 id="hello"></h2>
+        <div class="muted" id="streakLine"></div>
+        <div class="stat" style="margin-top:14px">
+          <div class="statbox"><div class="n" id="sLearned">0</div><div class="l">Đã học / 学習済み</div></div>
+          <div class="statbox"><div class="n" id="sMastered">0</div><div class="l">Đã thuộc / 習得</div></div>
+          <div class="statbox"><div class="n" id="sWeak">0</div><div class="l">Từ yếu / 苦手</div></div>
+          <div class="statbox"><div class="n" id="sStreak">0</div><div class="l">Chuỗi ngày / 連続</div></div>
+        </div>
+        <div style="margin-top:14px">
+          <div class="row sp"><span class="muted">Tiến độ tổng / 全体進捗</span><span class="muted" id="pctTxt">0%</span></div>
+          <div class="progressbar" style="margin-top:6px"><i id="pctBar"></i></div>
+          <div class="muted" style="margin-top:6px"><span id="learnedN">0</span> / <span id="totalN">0</span> từ</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Lịch học / 学習カレンダー</h3>
+        <div class="muted" style="margin-bottom:8px">30 ngày gần nhất</div>
+        <div class="cal" id="cal"></div>
+      </div>
+    </section>
+
+    <!-- FLASHCARD -->
+    <section id="vFlash" class="hidden">
+      <div class="card">
+        <div class="row sp">
+          <span class="pill" id="fCount">0 / 0</span>
+          <div class="seg" style="width:auto">
+            <button id="fModeAll" class="on" onclick="startFlash('all')">Tất cả</button>
+            <button id="fModeWeak" onclick="startFlash('weak')">Từ yếu</button>
+          </div>
+        </div>
+        <div class="progressbar" style="margin:12px 0"><i id="fBar"></i></div>
+        <div class="flash card" style="margin:0" id="fCard" onclick="flipCard()">
+          <div class="jp" id="fJp">—</div>
+          <div id="fBack" class="hidden">
+            <div class="reading" id="fReading"></div>
+            <div class="vn" id="fVn"></div>
+          </div>
+          <div class="muted" id="fHint" style="margin-top:14px">Chạm để xem nghĩa</div>
+        </div>
+        <div class="row" style="margin-top:14px;justify-content:center">
+          <button class="speak" onclick="event.stopPropagation();speakCurrent()">🔊</button>
+        </div>
+        <div class="row" style="margin-top:14px;gap:10px">
+          <button class="btn sec" style="flex:1" onclick="gradeCard(false)">❌ Chưa thuộc</button>
+          <button class="btn" style="flex:1" onclick="gradeCard(true)">✅ Đã thuộc</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="vQuiz" class="hidden">
+      <div class="card">
+        <div class="row sp">
+          <span class="pill" id="qCount">Câu 0 / 0</span>
+          <span class="muted" id="qScore">Đúng: 0</span>
+        </div>
+        <div class="seg" style="margin:12px 0">
+          <button id="qDirJV" class="on" onclick="setQuizDir('jv')">日 → Việt</button>
+          <button id="qDirVJ" onclick="setQuizDir('vj')">Việt → 日</button>
+        </div>
+        <div id="qBox">
+          <div class="center" style="padding:10px 0">
+            <div class="jp" id="qPrompt" style="font-size:34px">—</div>
+            <button class="speak" id="qSpeak" style="margin-top:10px" onclick="speakText(quiz.cur&&quiz.cur[0])">🔊</button>
+          </div>
+          <div id="qOpts" style="margin-top:14px"></div>
+        </div>
+        <button class="btn" id="qNext" style="width:100%;margin-top:6px" onclick="nextQuiz()">Câu tiếp →</button>
+      </div>
+    </section>
+
+    <!-- LIST -->
+    <section id="vList" class="hidden">
+      <div class="card">
+        <div class="row" style="gap:8px">
+          <input id="search" placeholder="Tìm kiếm 漢字・đọc・nghĩa" oninput="renderList()">
+          <select id="filter" style="width:auto" onchange="renderList()">
+            <option value="all">Tất cả</option>
+            <option value="learned">Đã học</option>
+            <option value="mastered">Đã thuộc</option>
+            <option value="weak">Từ yếu</option>
+            <option value="new">Chưa học</option>
+          </select>
+        </div>
+        <div class="muted" id="listCount" style="margin:10px 2px"></div>
+        <div style="overflow:auto;max-height:62vh">
+          <table><thead><tr><th>日本語</th><th>読み</th><th>Nghĩa</th><th></th></tr></thead>
+          <tbody id="listBody"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="vAdmin" class="hidden">
+      <div class="card">
+        <div class="row sp">
+          <h2 style="margin:0">Bảng điều khiển / 管理ダッシュボード</h2>
+          <button class="btn sec sm" onclick="loadAdmin()">↻ Làm mới</button>
+        </div>
+        <div class="stat" style="margin-top:14px">
+          <div class="statbox"><div class="n" id="aUsers">0</div><div class="l">Người học / 登録者</div></div>
+          <div class="statbox"><div class="n" id="aActive">0</div><div class="l">Hoạt động hôm nay</div></div>
+          <div class="statbox"><div class="n" id="aAvg">0</div><div class="l">TB từ đã học</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Tiến độ từng người / 登録者一覧</h3>
+        <div class="muted" id="adminHint" style="margin-bottom:8px"></div>
+        <div style="overflow:auto;max-height:60vh">
+          <table><thead><tr>
+            <th>Tên</th><th>Email</th><th>Đã học</th><th>Đã thuộc</th><th>Từ yếu</th><th>Chuỗi</th><th>Lần cuối</th>
+          </tr></thead><tbody id="adminBody"></tbody></table>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- vocab data -->
+<script src="vocab.js"></script>
+<!-- Firebase (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
